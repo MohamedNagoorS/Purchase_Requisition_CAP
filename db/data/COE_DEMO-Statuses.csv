@@ -1,0 +1,5 @@
+code;name;descr
+N;New;New Request
+A;Approved;Request Approved
+R;Rejected;Request Rejected
+C;Cancelled;Request Cancelled

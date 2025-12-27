@@ -1,1 +1,1 @@
-ID;invoicesID;invoiceNumber;vendorName;invoiceDate;totalAmount;currency;status;riskScore;paymentDueDate;comments
+ID;invoicesID;invoiceNumber;vendorName;invoiceDate;totalAmount;currency;status_code;riskScore;paymentDueDate;comments
