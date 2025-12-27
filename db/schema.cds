@@ -4,8 +4,13 @@ using { cuid, managed, sap.common.CodeList } from '@sap/cds/common';
 @assert.unique: { invoicesID: [invoicesID] }
 entity Invoices : cuid, managed {
   invoicesID: String(36) @mandatory;
+  
+  @title: 'Invoice Number'
   invoiceNumber: String(50);
+  
+  @title: 'Vendor Name'
   vendorName: String(100);
+  
   invoiceDate: Date;
   totalAmount: Decimal(10,2);
   currency : String(3);
@@ -19,7 +24,10 @@ entity Invoices : cuid, managed {
   // --- FIX END ---
 
   riskScore: Integer;
+  
+  @title: 'Payment Due Date'
   paymentDueDate: Date;
+  
   comments: String(1000);
 
   Items : Composition of many InvoiceItems on Items.parent = $self;
@@ -27,7 +35,10 @@ entity Invoices : cuid, managed {
 
 entity InvoiceItems : cuid, managed {
   parent : Association to Invoices;
+  
+  @title: 'Description'
   description : String(100);
+  
   quantity : Integer;
   price : Decimal(10,2);
 }

@@ -17,7 +17,7 @@ annotate cOE_DEMOSrv.Invoices with @UI.SelectionFields: [
 ];
 
 // ----------------------------------------------------------------
-// 2. INVOICE DETAIL PAGE
+// 2. INVOICE DETAIL PAGE (Combined Block)
 // ----------------------------------------------------------------
 annotate cOE_DEMOSrv.Invoices with @(
     // A. TITLE
@@ -28,9 +28,11 @@ annotate cOE_DEMOSrv.Invoices with @(
         Description : { Value : vendorName }
     },
 
-    // B. FORCE EMPTY HEADER SECTIONS (The Fix)
-    // We must explicitly say "Empty Array" [] to stop auto-generation.
-    UI.HeaderFacets : [], 
+    // B. HEADER CONTENT (Default Persistent Header)
+    // We leave this empty because we WANT the default "Object Information" behavior.
+    // Thanks to the Schema @title updates, the default fields now have correct labels.
+    // Explicitly adding a facet here would create a duplicate.
+    UI.HeaderFacets : [],
     UI.Identification : [],
 
     // C. BODY SECTIONS
@@ -66,32 +68,17 @@ annotate cOE_DEMOSrv.Invoices with @(
             { Value: status_code, Label: 'Status' },
             { Value: paymentDueDate, Label: 'Payment Due Date' }
         ]
+    },
+
+    // E. SIDE EFFECTS (Reactivity)
+    Common.SideEffects : { 
+        SourceEntities : [ Items ], 
+        TargetProperties : [ totalAmount ] 
     }
 );
 
 // ----------------------------------------------------------------
-// 3. ITEMS TABLE
-// ----------------------------------------------------------------
-annotate cOE_DEMOSrv.InvoiceItems with @UI.LineItem: [
-    { Value: description, Label: 'Description' },
-    { Value: quantity, Label: 'Quantity' },
-    { Value: price, Label: 'Unit Price' }
-];
-
-annotate cOE_DEMOSrv.InvoiceItems with @(
-    UI.HeaderInfo : { TypeName : 'Item', TypeNamePlural : 'Items', Title : { Value : description } },
-    UI.Facets : [ { $Type : 'UI.ReferenceFacet', Label : 'Item Details', Target : '@UI.FieldGroup#ItemMain' } ],
-    UI.FieldGroup #ItemMain : {
-        Data : [
-            { Value : description, Label : 'Description' },
-            { Value : quantity,    Label : 'Quantity' },
-            { Value : price,       Label : 'Unit Price' }
-        ]
-    }
-);
-
-// ----------------------------------------------------------------
-// 4. DROPDOWNS & LOGIC
+// 3. DROPDOWNS
 // ----------------------------------------------------------------
 annotate cOE_DEMOSrv.Invoices with {
     status_code @( Common : {
@@ -107,6 +94,33 @@ annotate cOE_DEMOSrv.Invoices with {
     })
 };
 
-annotate cOE_DEMOSrv.Invoices with @(
-    Common.SideEffects : { SourceEntities : [ Items ], TargetProperties : [ totalAmount ] }
+// ----------------------------------------------------------------
+// 4. ITEMS TABLE & SUB-SIDE EFFECTS
+// ----------------------------------------------------------------
+annotate cOE_DEMOSrv.InvoiceItems with @UI.LineItem: [
+    { Value: description, Label: 'Description' },
+    { Value: quantity, Label: 'Quantity' },
+    { Value: price, Label: 'Unit Price' }
+];
+
+annotate cOE_DEMOSrv.InvoiceItems with @(
+    UI.HeaderInfo : { TypeName : 'Item', TypeNamePlural : 'Items', Title : { Value : description } },
+    
+    // Header Content (Items)
+    // Similar to main Invoices, we rely on default persistence + Schema labels
+    UI.HeaderFacets : [],
+    UI.Identification : [],
+
+    UI.Facets : [ { $Type : 'UI.ReferenceFacet', Label : 'Item Details', Target : '@UI.FieldGroup#ItemMain' } ],
+    UI.FieldGroup #ItemMain : {
+        Data : [
+            { Value : description, Label : 'Description' },
+            { Value : quantity,    Label : 'Quantity' },
+            { Value : price,       Label : 'Unit Price' }
+        ]
+    },
+    // Refresh Header when Item value changes
+    Common.SideEffects : {
+        TargetProperties : [ 'parent/totalAmount' ]
+    }
 );
