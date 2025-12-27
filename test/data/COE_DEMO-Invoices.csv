@@ -1,0 +1,6 @@
+ID;invoicesID;invoiceNumber;vendorName;invoiceDate;totalAmount;status;riskScore;paymentDueDate;comments;currency
+4c0a69d8-ded1-42ae-8d12-dec41928a6c9;INV001;INV-1001;Tech Supplies Inc;2021-06-01;1500.00;Pending;2;2021-06-15;Delivery expected by next week.;INR
+a2adc33d-b8d8-4793-a9d8-ebcfd56c6fb5;INV002;INV-1002;Office Essentials Ltd;2021-06-05;75.50;Paid;1;2021-06-20;Invoice settled on time.;INR
+be559755-5765-4ff6-b4e2-0bfd008dccec;INV003;INV-1003;Furniture World;2021-06-10;2300.75;Pending;3;2021-06-25;Awaiting approval from management.;INR
+b3226e94-1f1c-4780-b485-d56a99499198;INV004;INV-1004;Stationery Hub;2021-06-15;45.30;Paid;1;2021-06-30;Small order for office supplies.;INR
+260d3a2d-b5b1-4d64-bc84-f63db09b9a8a;INV005;INV-1005;IT Solutions Co;2021-06-20;5000.00;Pending;4;2021-07-05;High value project invoice.;INR
