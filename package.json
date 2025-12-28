@@ -1,35 +1,38 @@
 {
-    "name": "COE_DEMO",
-    "version": "1.0.0",
-    "description": "A simple CAP project.",
-    "dependencies": {
-        "@cap-js/hana": "^2",
-        "@sap-cloud-sdk/http-client": "^4.2.0",
-        "@sap-cloud-sdk/util": "^4.2.0",
-        "@sap/cds": "^9",
-        "@sap/low-code-event-handler": "^1.2.5",
-        "@sap/xsenv": ">=3.3.2 <3.3.3",
-        "@sap/xssec": "^4.12.1",
-        "express": "^4",
-        "hdb": "^2.26.4",
-        "passport": "^0.7.0"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "^2",
-        "@sap/dev-cap-tools": "^1.31.0"
-    },
-    "scripts": {
-        "start": "cds-serve",
-        "start-local": "npm run generate-entry-point && npm run cds-watch",
-        "generate-entry-point": "dev-cap-tools gen-entrypoint",
-        "cds-watch": "cds watch --open"
-    },
-    "private": true,
-    "cds": {
+  "name": "COE_DEMO",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap-cloud-sdk/http-client": "^4.2.0",
+    "@sap-cloud-sdk/util": "^4.2.0",
+    "@sap/cds": "^9",
+    "@sap/low-code-event-handler": "^1.2.5",
+    "@sap/xsenv": ">=3.3.2 <3.3.3",
+    "@sap/xssec": "^4.12.1",
+    "express": "^4",
+    "hdb": "^2.26.4",
+    "passport": "^0.7.0"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": "^9",
+    "@sap/dev-cap-tools": "^1.31.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "start-local": "npm run generate-entry-point && npm run cds-watch",
+    "generate-entry-point": "dev-cap-tools gen-entrypoint",
+    "cds-watch": "cds watch --open"
+  },
+  "private": true,
+  "cds": {
     "requires": {
       "db": {
         "kind": "sqlite",
-        "credentials": { "url": "db.sqlite" }
+        "credentials": {
+          "url": "db.sqlite"
+        }
       },
       "[production]": {
         "db": "hana",
@@ -45,5 +48,5 @@
       }
     }
   },
-    "lcap": true
+  "lcap": true
 }
