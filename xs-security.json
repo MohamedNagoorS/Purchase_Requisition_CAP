@@ -1,6 +1,36 @@
 {
-  "scopes": [],
+  "xsappname": "COE_DEMO",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Administrator",
+      "description": "Administrative access"
+    },
+    {
+      "name": "$XSAPPNAME.User",
+      "description": "Standard user access"
+    }
+  ],
   "attributes": [],
-  "role-templates": [],
-  "authorities-inheritance": false
+  "role-templates": [
+    {
+      "name": "Administrator",
+      "description": "Administrator",
+      "scope-references": [
+        "$XSAPPNAME.Administrator"
+      ]
+    },
+    {
+      "name": "User",
+      "description": "User",
+      "scope-references": [
+        "$XSAPPNAME.User"
+      ]
+    }
+  ],
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://*.cfapps.us10-001.hana.ondemand.com/**"
+    ]
+  }
 }

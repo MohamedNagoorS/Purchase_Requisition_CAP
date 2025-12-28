@@ -11,6 +11,7 @@ build-parameters:
         - npm ci
         - npx cds build --production
 modules:
+  # 1. BACKEND SERVICE
   - name: COE_DEMO-srv
     type: nodejs
     path: gen/srv
@@ -20,13 +21,14 @@ modules:
     build-parameters:
       builder: npm-ci
     provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      - name: srv-api
         properties:
           srv-url: ${default-url}
     requires:
       - name: COE_DEMO-auth
       - name: COE_DEMO-db
 
+  # 2. DATABASE DEPLOYER
   - name: COE_DEMO-db-deployer
     type: hdb
     path: gen/db
@@ -35,7 +37,24 @@ modules:
     requires:
       - name: COE_DEMO-db
 
+  # 3. APPROUTER (THE LOGIN HANDLER)
+  - name: COE_DEMO-router
+    type: approuter.nodejs
+    path: router
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+    requires:
+      - name: COE_DEMO-auth
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+
 resources:
+  # AUTHENTICATION
   - name: COE_DEMO-auth
     type: org.cloudfoundry.managed-service
     parameters:
@@ -45,6 +64,8 @@ resources:
       config:
         xsappname: COE_DEMO-${org}-${space}
         tenant-mode: dedicated
+
+  # DATABASE
   - name: COE_DEMO-db
     type: com.sap.xs.hdi-container
     parameters:
