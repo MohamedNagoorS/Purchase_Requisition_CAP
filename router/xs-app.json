@@ -11,7 +11,7 @@
     },
     {
       "source": "^/(.*)$",
-      "localDir": "../app",
+      "localDir": "app",
       "authenticationType": "xsuaa"
     }
   ]
