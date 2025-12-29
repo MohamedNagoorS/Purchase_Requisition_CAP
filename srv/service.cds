@@ -14,3 +14,25 @@ service cOE_DEMOSrv {
   // Explicitly expose items
   entity InvoiceItems as projection on my.InvoiceItems;
 }
+
+@impl: './service.js'
+@path: '/service/procurement'
+service ProcurementService {
+    entity Requisitions as projection on my.RequisitionHeader;
+    entity RequisitionItems as projection on my.RequisitionItems;
+    entity Vendors as projection on my.Vendors;
+    entity CostCenters as projection on my.CostCenters;
+    
+    entity CatalogItems as projection on my.CatalogItems actions {
+        action createCatalogPR(
+            CostCenterID: String
+        ) returns Requisitions;
+    };
+
+    action createManualPR(
+        MaterialName: String,
+        Quantity: Integer,
+        Price: Decimal(10,2),
+        CostCenterID: String
+    ) returns Requisitions;
+}

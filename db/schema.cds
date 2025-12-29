@@ -51,3 +51,51 @@ entity Statuses : CodeList {
     C;
   }
 }
+
+// ----------------------------------------------------------------------------
+// Purchase Requisition Process Entities
+// ----------------------------------------------------------------------------
+
+entity RequisitionHeader : cuid, managed {
+    @title: 'Description'
+    Description : String(255);
+    
+    @title: 'Total Price'
+    TotalPrice : Decimal(10,2);
+    
+    items : Composition of many RequisitionItems on items.parent = $self;
+}
+
+entity RequisitionItems : cuid, managed {
+    parent : Association to RequisitionHeader;
+    
+    @title: 'Material'
+    MaterialDescription : String(255);
+    
+    @title: 'Price'
+    Price : Decimal(10,2);
+    
+    @title: 'Quantity'
+    Quantity : Integer;
+    
+    @title: 'Cost Center'
+    CostCenter : String(10); 
+}
+
+@cds.persistence.exists: false // Ensure CAP generates the table
+entity Vendors {
+    key ID : String(20); // Alphanumeric ID like 'VENDOR_A'
+    Name : String(100);
+}
+
+entity CostCenters {
+    key ID : String(10); // Alphanumeric ID like 'CC100'
+    Name : String(100);
+    Department : String(100);
+}
+
+entity CatalogItems : cuid {
+    ItemName : String(100);
+    Price : Decimal(10,2);
+    vendor : Association to Vendors;
+}
