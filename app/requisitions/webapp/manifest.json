@@ -1,0 +1,123 @@
+{
+    "_version": "1.49.0",
+    "sap.app": {
+        "id": "coe.demo.requisitions",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "Purchase Requisitions",
+        "description": "App to manage Purchase Requisitions",
+        "sourceTemplate": {
+            "id": "service.v4",
+            "version": "1.0.0"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/service/procurement/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "4.0"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "sap-icon://cart"
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.108.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.ushell": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "coe.demo.requisitions.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "coe.demo.requisitions.view",
+                "controlId": "app",
+                "controlAggregation": "pages",
+                "async": true
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "List",
+                    "target": "List"
+                },
+                {
+                    "pattern": "Requisitions({key})",
+                    "name": "Object",
+                    "target": "Object"
+                }
+            ],
+            "targets": {
+                "List": {
+                    "type": "Component",
+                    "id": "List",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Requisitions",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "Requisitions": {
+                                    "detail": {
+                                        "route": "Object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "Object": {
+                    "type": "Component",
+                    "id": "Object",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Requisitions"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
