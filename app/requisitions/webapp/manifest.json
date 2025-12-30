@@ -46,7 +46,7 @@
             }
         },
         "rootView": {
-            "viewName": "sap.fe.core.rootView",
+            "viewName": "sap.fe.core.rootView.NavContainer",
             "type": "XML",
             "async": true,
             "id": "appRoot"
