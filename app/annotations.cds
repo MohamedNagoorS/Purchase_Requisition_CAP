@@ -125,7 +125,7 @@ annotate ProcurementService.Requisitions with @(
     UI.LineItem: [
         { $Type: 'UI.DataField', Value: ID, Label: 'Requisition ID' },
         { $Type: 'UI.DataField', Value: Description, Label: 'Description' },
-        { $Type: 'UI.DataField', Value: TotalPrice, Label: 'Total Price' },
+        { $Type: 'UI.DataField', Value: TotalPrice, Label: 'Total Price', @Measures.ISOCurrency: 'USD' }, // Assuming USD for now
         { $Type: 'UI.DataField', Value: createdAt, Label: 'Created At' },
         // Custom Action: Create Manual PR (Unbound)
         { $Type: 'UI.DataFieldForAction', Action: 'ProcurementService.EntityContainer/createManualPR', Label: 'New Manual PR' }
@@ -146,6 +146,18 @@ annotate ProcurementService.Requisitions with @(
         TypeNamePlural: 'Requisitions',
         Title: { Value: Description },
         Description: { Value: ID }
+    },
+    UI.HeaderFacets: [
+        {
+            $Type: 'UI.ReferenceFacet',
+            ID: 'PriceHeader',
+            Target: '@UI.DataPoint#TotalPrice'
+        }
+    ],
+    UI.DataPoint #TotalPrice: {
+        Value: TotalPrice,
+        Title: 'Total Value',
+        @Measures.ISOCurrency: 'USD'
     },
     UI.Facets: [
         {
@@ -171,8 +183,8 @@ annotate ProcurementService.Requisitions with @(
         Data: [
             { Value: ID, Label: 'ID' },
             { Value: Description, Label: 'Description' },
-            { Value: TotalPrice, Label: 'Total Price' },
-            { Value: createdAt, Label: 'Created At' }
+            { Value: createdAt, Label: 'Created On' },
+            { Value: TotalPrice, Label: 'Total Amount', @Measures.ISOCurrency: 'USD' }
         ]
     }
 );
@@ -183,7 +195,7 @@ annotate ProcurementService.Requisitions with @(
 annotate ProcurementService.RequisitionItems with @UI.LineItem: [
     { $Type: 'UI.DataField', Value: MaterialDescription, Label: 'Material' },
     { $Type: 'UI.DataField', Value: Quantity, Label: 'Quantity' },
-    { $Type: 'UI.DataField', Value: Price, Label: 'Price' },
+    { $Type: 'UI.DataField', Value: Price, Label: 'Price', @Measures.ISOCurrency: 'USD' },
     { $Type: 'UI.DataField', Value: CostCenter, Label: 'Cost Center' }
 ];
 
@@ -193,7 +205,7 @@ annotate ProcurementService.RequisitionItems with @UI.LineItem: [
 annotate ProcurementService.CatalogItems with @(
     UI.LineItem: [
         { $Type: 'UI.DataField', Value: ItemName, Label: 'Item Name' },
-        { $Type: 'UI.DataField', Value: Price, Label: 'Price' },
+        { $Type: 'UI.DataField', Value: Price, Label: 'Price', @Measures.ISOCurrency: 'USD' },
         { $Type: 'UI.DataField', Value: vendor.Name, Label: 'Vendor' },
         // Custom Action: Create Catalog PR (Bound)
         { $Type: 'UI.DataFieldForAction', Action: 'ProcurementService.createCatalogPR', Label: 'Create PR from Selected', InvocationGrouping : #ChangeSet }
