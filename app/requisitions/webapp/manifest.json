@@ -45,6 +45,15 @@
                 "sap.fe.templates": {}
             }
         },
+        "extends": {
+            "extensions": {
+                "sap.ui.controllerExtensions": {
+                    "sap.fe.templates.ListReport.ListReportController": {
+                        "controllerName": "coe.demo.requisitions.ext.controller.ListReportExt"
+                    }
+                }
+            }
+        },
         "contentDensities": {
             "compact": true,
             "cozy": true
@@ -83,6 +92,11 @@
                     "target": "List"
                 },
                 {
+                    "pattern": "catalog",
+                    "name": "CatalogList",
+                    "target": "CatalogList"
+                },
+                {
                     "pattern": "Requisitions({key})",
                     "name": "Object",
                     "target": "Object"
@@ -103,7 +117,29 @@
                                         "route": "Object"
                                     }
                                 }
+                            },
+                            "controlConfiguration": {
+                                "@com.sap.vocabularies.UI.v1.LineItem": {
+                                    "actions": {
+                                        "BrowseCatalog": {
+                                            "press": "coe.demo.requisitions.ext.controller.ListReportExt.onBrowseCatalog",
+                                            "text": "Browse Catalog",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
                             }
+                        }
+                    }
+                },
+                "CatalogList": {
+                    "type": "Component",
+                    "id": "CatalogList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "CatalogItems",
+                            "variantManagement": "Page"
                         }
                     }
                 },
