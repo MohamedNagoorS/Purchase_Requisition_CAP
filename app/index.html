@@ -3,10 +3,14 @@
 
 <head>
     <title> Project Preview </title>
-    <script src="https://ui5.sap.com/1.136.9/resources/sap-ui-core.js" id="sap-ui-bootstrap"
-        data-sap-ui-theme="sap_horizon" data-sap-ui-bindingSyntax="complex" data-sap-ui-xx-bindingSyntax="complex"
-        data-sap-ui-resourceroots='{"assets": "assets"}' data-sap-ui-libs="sap.m,sap.uxap,sap.ui.layout,sap.f">
-        </script>
+    <script src="https://ui5.sap.com/1.136.9/resources/sap-ui-core.js" 
+            id="sap-ui-bootstrap"
+            data-sap-ui-theme="sap_horizon"
+            data-sap-ui-bindingSyntax="complex" 
+            data-sap-ui-xx-bindingSyntax="complex"
+            data-sap-ui-resourceroots='{"assets": "assets"}' 
+            data-sap-ui-libs="sap.m,sap.uxap,sap.ui.layout,sap.f">
+    </script>
     <link rel="stylesheet" href="assets/preview.css">
 </head>
 
@@ -23,55 +27,7 @@
                     return Controller.extend("PreviewController", {
                         onInit: function () {
 
-                            // REPLACE YOUR EXISTING 'const data' WITH THIS:
-
-                            const data = {
-                                "Services": [
-                                    // --- ADDED LINK TO LAUNCHPAD ---
-                                    {
-                                        "ServiceName": "🚀 Main Fiori Launchpad",
-                                        "DetailsURL": "/launchpadPage.html",
-                                        "Metadata": "",
-                                        "Entities": [],
-                                        "EntitiesCount": 0
-                                    },
-                                    // -------------------------------
-                                    {
-                                        "ServiceName": "ProcurementService",
-                                        "DetailsURL": "./service/procurement/",
-                                        "Metadata": "./service/procurement/$metadata",
-                                        "Entities": [
-                                            {
-                                                "Name": "Requisitions",
-                                                "URL": "./service/procurement/Requisitions",
-                                                "FioriURL": "$fiori-preview/ProcurementService/Requisitions#preview-app"
-                                            },
-                                            {
-                                                "Name": "CatalogItems",
-                                                "URL": "./service/procurement/CatalogItems",
-                                                "FioriURL": "$fiori-preview/ProcurementService/CatalogItems#preview-app"
-                                            }
-                                        ],
-                                        "EntitiesCount": 2
-                                    },
-                                    // 1. Existing Service (Invoices)
-                                    {
-                                        "ServiceName": "cOE_DEMOSrv",
-                                        "DetailsURL": "./service/cOE_DEMO/",
-                                        "Metadata": "./service/cOE_DEMO/$metadata",
-                                        "Entities": [
-                                            {
-                                                "Name": "Invoices",
-                                                "URL": "./service/cOE_DEMO/Invoices",
-                                                "FioriURL": "$fiori-preview/cOE_DEMOSrv/Invoices#preview-app"
-                                            }
-                                        ],
-                                        "EntitiesCount": 1
-                                    }
-                                    // 2. NEW Service (Procurement)
-
-                                ]
-                            };
+                            const data = {"Services":[{"ServiceName":"cOE_DEMOSrv","DetailsURL":"./service/cOE_DEMO/","Metadata":"./service/cOE_DEMO/$metadata","Entities":[{"Name":"Invoices","URL":"./service/cOE_DEMO/Invoices","FioriURL":"$fiori-preview/cOE_DEMOSrv/Invoices#preview-app"},{"Name":"InvoiceItems","URL":"./service/cOE_DEMO/InvoiceItems","FioriURL":"$fiori-preview/cOE_DEMOSrv/InvoiceItems#preview-app"}],"EntitiesCount":2},{"ServiceName":"ProcurementService","DetailsURL":"./service/procurement/","Metadata":"./service/procurement/$metadata","Entities":[{"Name":"Requisitions","URL":"./service/procurement/Requisitions","FioriURL":"$fiori-preview/ProcurementService/Requisitions#preview-app"},{"Name":"RequisitionItems","URL":"./service/procurement/RequisitionItems","FioriURL":"$fiori-preview/ProcurementService/RequisitionItems#preview-app"},{"Name":"Vendors","URL":"./service/procurement/Vendors","FioriURL":"$fiori-preview/ProcurementService/Vendors#preview-app"},{"Name":"CostCenters","URL":"./service/procurement/CostCenters","FioriURL":"$fiori-preview/ProcurementService/CostCenters#preview-app"},{"Name":"CatalogItems","URL":"./service/procurement/CatalogItems","FioriURL":"$fiori-preview/ProcurementService/CatalogItems#preview-app"}],"EntitiesCount":5}]}
                             this.getView().setModel(new JSONModel(data));
                         }
                     });
