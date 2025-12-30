@@ -104,44 +104,68 @@ module.exports = cds.service.impl(async function () {
         // Action: createCatalogPR (Bound to CatalogItems)
         this.on('createCatalogPR', 'CatalogItems', async (req) => {
             const { CostCenterID } = req.data;
+            const tx = cds.tx(req); // Get the current transaction
 
-            // For Bound Actions, the selected instances are in req.query
-            // We can re-execute the query to get the items
-            const items = await cds.tx(req).run(req.query);
+            // 1. Get the specific item for this request
+            // In a batch/changeset, this action is called once per selected item.
+            // req.query targets the specific item instance.
+            const items = await tx.run(req.query);
 
             if (!items || items.length === 0) {
-                req.error(400, "No catalog items selected.");
-                return;
+                // This might happen if the item doesn't exist anymore
+                return req.error(404, "Catalog item not found.");
+            }
+            const item = items[0];
+
+            // 2. Check for an existing Header ID in the current transaction state
+            // We use a custom property on the transaction object to share state across the batch
+            const BATCH_KEY = 'ACTIVE_REQUISITION_ID';
+            let headerID = tx[BATCH_KEY];
+
+            if (!headerID) {
+                // First item in the batch -> Create the Header
+                headerID = cds.utils.uuid();
+                tx[BATCH_KEY] = headerID; // Store for valid subsequent calls in this batch
+
+                console.log(`--> Creating New Batch Requisition: ${headerID}`);
+
+                await INSERT.into(Requisitions).entries({
+                    ID: headerID,
+                    Description: `Catalog PR (Initializing...)`,
+                    TotalPrice: 0,
+                    createdAt: new Date().toISOString() // Optional if auto-managed
+                });
+            } else {
+                console.log(`--> Adding to Existing Batch Requisition: ${headerID}`);
             }
 
-            // 2. Calculate Total
-            let total = 0;
-            items.forEach(i => total += Number(i.Price));
-
-            const headerID = cds.utils.uuid();
-
-            // 3. Insert Header
-            await INSERT.into(Requisitions).entries({
-                ID: headerID,
-                Description: `Catalog PR with ${items.length} items`,
-                TotalPrice: total
-            });
-
-            // 4. Insert Items
-            const lineItems = items.map(item => ({
+            // 3. Add the Item to the Requisition
+            await INSERT.into(RequisitionItems).entries({
                 ID: cds.utils.uuid(),
                 parent_ID: headerID,
                 MaterialDescription: item.ItemName,
                 Price: item.Price,
-                Quantity: 1, // Defaulting to 1 for catalog selection
+                Quantity: 1, // Default quantity
                 CostCenter: CostCenterID
-            }));
+            });
 
-            if (lineItems.length > 0) {
-                await INSERT.into(RequisitionItems).entries(lineItems);
+            // 4. Update Header Totals (Recalculate from DB to be safe)
+            // Since we are in the same transaction, we can see the inserted items
+            const allItems = await tx.run(
+                SELECT.from(RequisitionItems).columns('Price', 'Quantity').where({ parent_ID: headerID })
+            );
+
+            let total = 0;
+            if (allItems) {
+                allItems.forEach(i => total += (Number(i.Price) || 0) * (Number(i.Quantity) || 0));
             }
 
-            // 5. Return result
+            await UPDATE(Requisitions).set({
+                TotalPrice: total,
+                Description: `Catalog PR with ${allItems.length} items`
+            }).where({ ID: headerID });
+
+            // 5. Return the updated header
             return SELECT.one.from(Requisitions).where({ ID: headerID });
         });
     }

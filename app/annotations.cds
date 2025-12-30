@@ -196,7 +196,7 @@ annotate ProcurementService.CatalogItems with @(
         { $Type: 'UI.DataField', Value: Price, Label: 'Price' },
         { $Type: 'UI.DataField', Value: vendor.Name, Label: 'Vendor' },
         // Custom Action: Create Catalog PR (Bound)
-        { $Type: 'UI.DataFieldForAction', Action: 'ProcurementService.createCatalogPR', Label: 'Create PR from Selected' }
+        { $Type: 'UI.DataFieldForAction', Action: 'ProcurementService.createCatalogPR', Label: 'Create PR from Selected', InvocationGrouping : #ChangeSet }
     ]
 );
 
