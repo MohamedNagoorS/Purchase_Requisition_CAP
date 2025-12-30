@@ -45,6 +45,12 @@
                 "sap.fe.templates": {}
             }
         },
+        "rootView": {
+            "viewName": "sap.fe.core.rootView",
+            "type": "XML",
+            "async": true,
+            "id": "appRoot"
+        },
         "extends": {
             "extensions": {
                 "sap.ui.controllerExtensions": {
